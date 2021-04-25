@@ -41,25 +41,59 @@ public class DefaultCsvWriter implements CsvWriter{
     }
 
     /**
+     * get delimiter from file config
+     * @param fileConfig
+     * @return
+     */
+    private String getDelimiter(CsvFileConfig fileConfig) {
+        String delimiter = ",";
+        //Define delimiter
+        if(csvFileConfig != null && csvFileConfig.getDelimiter() != null
+                && !csvFileConfig.getDelimiter().equals("")) {
+            delimiter = csvFileConfig.getDelimiter();
+        }
+        return delimiter;
+    }
+
+    /**
+     * define status of double quote is on or off
+     * @param csvFileConfig
+     * @return
+     */
+    private boolean defineStatusOfQuote(CsvFileConfig csvFileConfig) {
+        boolean quotedMote = false;
+        //Check doubleQuoteMode
+        if(csvFileConfig != null && csvFileConfig.isQuoteMote() == true) {
+            quotedMote = true;
+        }
+        return quotedMote;
+    }
+
+    /**
+     * Check available of file and writer object for writing to file
+     * @throws IOException
+     */
+    private void checkFileAndWriterObject() throws IOException{
+        if(this.file == null || !this.file.exists()) {
+            throw new IOException();
+        }
+
+        if(printWriter == null) {
+            printWriter = new PrintWriter(file);
+        }
+    }
+
+    /**
      * Method write one line to file
      * @param line
      * @throws IOException
      */
     @Override
     public void write(CsvLine line) throws IOException {
-        String delimiter = ",";
-        boolean quotedMote = false;
+        String delimiter = getDelimiter(csvFileConfig);
+        boolean quotedMote = defineStatusOfQuote(csvFileConfig);
 
-        //Define delimiter
-        if(csvFileConfig != null && csvFileConfig.getDelimiter() != null
-                && !csvFileConfig.getDelimiter().equals("")) {
-            delimiter = csvFileConfig.getDelimiter();
-        }
-
-        //Check doubleQuoteMode
-        if(csvFileConfig != null && csvFileConfig.isQuoteMote() == true) {
-            quotedMote = true;
-        }
+        checkFileAndWriterObject();
 
         List<String> stringList = line.getStringList();
         if(stringList != null && stringList.size() > 0) {
@@ -76,11 +110,8 @@ public class DefaultCsvWriter implements CsvWriter{
                 else {
                     details = details + symbol + element + symbol;
                 }
+            }
 
-            }
-            if(printWriter == null) {
-                printWriter = new PrintWriter(file);
-            }
             printWriter.write(details);
         }
     }
@@ -92,24 +123,11 @@ public class DefaultCsvWriter implements CsvWriter{
      */
     @Override
     public void write(Collection<CsvLine> line) throws IOException {
+        checkFileAndWriterObject();
         if(line != null && line.size() > 0) {
-            if(printWriter == null) {
-                printWriter = new PrintWriter(file);
-            }
 
-            String delimiter = ",";
-            boolean quotedMote = false;
-
-            //Define delimiter
-            if(csvFileConfig != null && csvFileConfig.getDelimiter() != null
-                    && !csvFileConfig.getDelimiter().equals("")) {
-                delimiter = csvFileConfig.getDelimiter();
-            }
-
-            //Check doubleQuoteMode
-            if(csvFileConfig != null && csvFileConfig.isQuoteMote() == true) {
-                quotedMote = true;
-            }
+            String delimiter = getDelimiter(csvFileConfig);
+            boolean quotedMote = defineStatusOfQuote(csvFileConfig);
 
             Iterator<CsvLine> iterator = line.iterator();
             String detail = "";
@@ -119,13 +137,15 @@ public class DefaultCsvWriter implements CsvWriter{
                 if(quotedMote == true) {
                     symbol = "\"";
                 }
-                for (String element: iterator.next().getStringList()) {
-
-                    if (!detail.equals("")) {
-                        detail = detail + delimiter + symbol + element + symbol;
-                    }
-                    else {
-                        detail = detail + symbol + element + symbol;
+                List<String> stringList = iterator.next().getStringList();
+                if(stringList != null) {
+                    for (String element: stringList) {
+                        if (!detail.equals("")) {
+                            detail = detail + delimiter + symbol + element + symbol;
+                        }
+                        else {
+                            detail = detail + symbol + element + symbol;
+                        }
                     }
                 }
                 printWriter.println(detail);
