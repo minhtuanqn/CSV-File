@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 /**
  * Class DefaultCsvParser implements CsvParser interface
@@ -42,7 +45,8 @@ public class DefaultCsvParser implements CsvParser {
         try {
             this.csvLineList = readFile(fileConfig);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger logger = Logger.getLogger("ParserLogger");
+            logger.log(new LogRecord(Level.SEVERE, e.getMessage()));
         }
         this.curFlag = 0;
     }

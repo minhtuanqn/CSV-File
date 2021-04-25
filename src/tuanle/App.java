@@ -2,6 +2,9 @@ package tuanle;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 public class App {
     public static void main(String[] args) {
@@ -9,7 +12,7 @@ public class App {
         /**
          * Test read and parse from file
          */
-//        // Initialize parser
+        // Initialize parser
 //        final File file = new File("foo.csv");
 //        final CsvParser parser = new DefaultCsvParser(file);
 //
@@ -25,7 +28,8 @@ public class App {
 //        try {
 //            parser.close();
 //        } catch (IOException e) {
-//            e.printStackTrace();
+//            Logger logger = Logger.getLogger("ParserLogger");
+//            logger.log(new LogRecord(Level.SEVERE, e.getMessage()));
 //        }
 
         /**
@@ -48,7 +52,9 @@ public class App {
             System.out.println("Write to file successfully");
         }
         catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("ok");
+            Logger logger = Logger.getLogger("WriterLogger");
+            logger.log(new LogRecord(Level.SEVERE, e.getMessage()));
         }
 
     }
