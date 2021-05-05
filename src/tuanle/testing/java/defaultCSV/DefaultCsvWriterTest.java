@@ -1,21 +1,22 @@
-package tuanle.testing;
+package defaultCSV;
 
+import defaultCSV.iml.DefaultCsvParser;
+import defaultCSV.iml.DefaultCsvWriter;
+import model.CsvFileConfig;
+import model.CsvLine;
 import org.junit.Test;
-import tuanle.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static defaultCSV.CsvTestUtils.createCsvFileConfig;
 import static org.junit.Assert.*;
 import java.util.Scanner;
 import java.util.function.Consumer;
-
-import static tuanle.testing.CsvTestUtils.createTestFile;
-import static tuanle.testing.CsvTestUtils.writeWithAssertion;
-import static tuanle.testing.CsvTestUtils.createCsvFileConfig;
-import static tuanle.testing.CsvTestUtils.createDumpCsvLines;
+import static defaultCSV.CsvTestUtils.*;
 
 public class DefaultCsvWriterTest {
     @Test
@@ -119,7 +120,6 @@ public class DefaultCsvWriterTest {
         final CsvWriter writer = new DefaultCsvWriter(testFile, csvFileConfig);
 
         writerConsumer.accept(writer);
-        writer.close();
 
         try (Scanner scanner = new Scanner(testFile)) {
             while (scanner.hasNext()) {

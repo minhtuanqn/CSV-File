@@ -1,8 +1,6 @@
-package tuanle.testing;
+package defaultCSV;
 
-import org.junit.Test;
-import tuanle.CsvLine;
-import tuanle.CsvParser;
+import model.CsvLine;
 
 import java.util.*;
 import java.util.stream.Collectors;

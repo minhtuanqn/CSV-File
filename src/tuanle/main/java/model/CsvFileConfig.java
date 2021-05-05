@@ -1,9 +1,8 @@
-package tuanle;
+package model;
 
 /**
  * Configuration used to determine parsing strategy and writing strategy
  */
-
 public class CsvFileConfig {
 
     private String delimiter;

@@ -1,4 +1,8 @@
-package tuanle;
+package defaultCSV.iml;
+
+import defaultCSV.CsvWriter;
+import model.CsvFileConfig;
+import model.CsvLine;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +14,7 @@ import java.util.List;
 /**
  * Implement CSV writing logic here
  */
-public class DefaultCsvWriter implements CsvWriter{
+public class DefaultCsvWriter implements CsvWriter {
 
     private File file;
     private PrintWriter printWriter = null;
@@ -113,6 +117,7 @@ public class DefaultCsvWriter implements CsvWriter{
             }
 
             printWriter.write(details);
+            printWriter.flush();
         }
     }
 
@@ -149,6 +154,7 @@ public class DefaultCsvWriter implements CsvWriter{
                     }
                 }
                 printWriter.println(detail);
+                printWriter.flush();
             }
         }
     }
