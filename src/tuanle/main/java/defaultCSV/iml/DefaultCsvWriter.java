@@ -17,7 +17,6 @@ import java.util.List;
 public class DefaultCsvWriter implements CsvWriter {
 
     private File file;
-    private PrintWriter printWriter = null;
     private CsvFileConfig csvFileConfig = null;
 
     /**
@@ -74,16 +73,12 @@ public class DefaultCsvWriter implements CsvWriter {
     }
 
     /**
-     * Check available of file and writer object for writing to file
+     * Check available of file
      * @throws IOException
      */
-    private void checkFileAndWriterObject() throws IOException{
+    private void checkAvailableFile() throws IOException{
         if(this.file == null || !this.file.exists()) {
             throw new IOException();
-        }
-
-        if(printWriter == null) {
-            printWriter = new PrintWriter(file);
         }
     }
 
@@ -94,30 +89,29 @@ public class DefaultCsvWriter implements CsvWriter {
      */
     @Override
     public void write(CsvLine line) throws IOException {
+        checkAvailableFile();
         String delimiter = getDelimiter(csvFileConfig);
         boolean quotedMote = defineStatusOfQuote(csvFileConfig);
 
-        checkFileAndWriterObject();
+        try (PrintWriter printWriter = new PrintWriter(this.file)){
 
-        List<String> stringList = line.getStringList();
-        if(stringList != null && stringList.size() > 0) {
-            String details = "";
-            String symbol = "";
-            if(quotedMote == true) {
-                symbol = "\"";
-            }
-
-            for (String element: stringList) {
-                if(!details.equals("")) {
-                    details = details + delimiter + symbol + element + symbol;
+            List<String> stringList = line.getStringList();
+            if(stringList != null && stringList.size() > 0) {
+                String details = "", symbol = "";
+                if(quotedMote == true) {
+                    symbol = "\"";
                 }
-                else {
-                    details = details + symbol + element + symbol;
+                for (String element: stringList) {
+                    if(!details.equals("")) {
+                        details = details + delimiter + symbol + element + symbol;
+                    }
+                    else {
+                        details = details + symbol + element + symbol;
+                    }
                 }
+                printWriter.write(details);
+                printWriter.flush();
             }
-
-            printWriter.write(details);
-            printWriter.flush();
         }
     }
 
@@ -128,35 +122,38 @@ public class DefaultCsvWriter implements CsvWriter {
      */
     @Override
     public void write(Collection<CsvLine> line) throws IOException {
-        checkFileAndWriterObject();
-        if(line != null && line.size() > 0) {
+        checkAvailableFile();
+        try (PrintWriter printWriter = new PrintWriter(this.file)){
+            if(line != null && line.size() > 0) {
 
-            String delimiter = getDelimiter(csvFileConfig);
-            boolean quotedMote = defineStatusOfQuote(csvFileConfig);
+                String delimiter = getDelimiter(csvFileConfig);
+                boolean quotedMote = defineStatusOfQuote(csvFileConfig);
 
-            Iterator<CsvLine> iterator = line.iterator();
-            String detail = "";
-            while (iterator.hasNext()) {
-                detail = "";
-                String symbol = "";
-                if(quotedMote == true) {
-                    symbol = "\"";
-                }
-                List<String> stringList = iterator.next().getStringList();
-                if(stringList != null) {
-                    for (String element: stringList) {
-                        if (!detail.equals("")) {
-                            detail = detail + delimiter + symbol + element + symbol;
-                        }
-                        else {
-                            detail = detail + symbol + element + symbol;
+                Iterator<CsvLine> iterator = line.iterator();
+                String detail = "";
+                while (iterator.hasNext()) {
+                    detail = "";
+                    String symbol = "";
+                    if(quotedMote == true) {
+                        symbol = "\"";
+                    }
+                    List<String> stringList = iterator.next().getStringList();
+                    if(stringList != null) {
+                        for (String element: stringList) {
+                            if (!detail.equals("")) {
+                                detail = detail + delimiter + symbol + element + symbol;
+                            }
+                            else {
+                                detail = detail + symbol + element + symbol;
+                            }
                         }
                     }
+                    printWriter.println(detail);
+                    printWriter.flush();
                 }
-                printWriter.println(detail);
-                printWriter.flush();
             }
         }
+
     }
 
     /**
@@ -165,8 +162,6 @@ public class DefaultCsvWriter implements CsvWriter {
      */
     @Override
     public void close() throws IOException{
-        if(printWriter != null) {
-            printWriter.close();
-        }
+
     }
 }

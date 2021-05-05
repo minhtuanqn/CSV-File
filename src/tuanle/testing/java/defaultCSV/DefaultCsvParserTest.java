@@ -32,13 +32,11 @@ public class DefaultCsvParserTest {
         final CsvFileConfig parserConfig = createCsvFileConfig();
         parserConfig.setDelimiter(",");
         execute(parserConfig, "/comma.csv");
-//        execute(parserConfig, "comma.csv");
     }
 
     @Test(expected = IOException.class)
     public void whenParse_NonExistingFile_ThenReject() throws URISyntaxException, IOException {
         execute(createCsvFileConfig(), "/not-found.csv");
-//        execute(createCsvFileConfig(), "not-found.csv");
     }
 
     /**
@@ -52,7 +50,6 @@ public class DefaultCsvParserTest {
         parserConfig.setDelimiter(",");
         parserConfig.setQuoteMode(true);
         execute(parserConfig, "/abnormal.csv");
-        //execute(parserConfig, "abnormal.csv");
     }
 
     @Test(expected = IllegalArgumentException.class)

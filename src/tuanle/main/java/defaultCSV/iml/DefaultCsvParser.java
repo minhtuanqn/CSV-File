@@ -3,6 +3,8 @@ package defaultCSV.iml;
 import defaultCSV.CsvParser;
 import model.CsvFileConfig;
 import model.CsvLine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,9 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
 
 /**
  * Class DefaultCsvParser implements CsvParser interface
@@ -23,10 +22,9 @@ import java.util.logging.Logger;
 public class DefaultCsvParser implements CsvParser {
 
     private File file;
-    private BufferedReader bufferedReader = null;
-    private FileReader fileReader = null;
     private List<CsvLine> csvLineList = null;
     private int curFlag;
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultCsvParser.class);
 
 
     /**
@@ -49,8 +47,8 @@ public class DefaultCsvParser implements CsvParser {
         try {
             this.csvLineList = readFile(fileConfig);
         } catch (IOException e) {
-            Logger logger = Logger.getLogger("ParserLogger");
-            logger.log(new LogRecord(Level.SEVERE, e.getMessage()));
+           String message = "ERROR IOException from read file function: ";
+           LOGGER.error(message, e.getStackTrace());
         }
         this.curFlag = 0;
     }
@@ -60,7 +58,7 @@ public class DefaultCsvParser implements CsvParser {
      * @param fileConfig
      * @throws IOException
      */
-    private void checkConnectionForRead(CsvFileConfig fileConfig) throws IOException{
+    private void checkFileAndConfig(CsvFileConfig fileConfig) throws IOException{
         if (fileConfig == null) {
             throw new IllegalArgumentException();
         }
@@ -69,12 +67,6 @@ public class DefaultCsvParser implements CsvParser {
         }
         if (!file.exists()) {
             throw new IOException();
-        }
-        if (fileReader == null) {
-            fileReader = new FileReader(file);
-        }
-        if (bufferedReader == null) {
-            bufferedReader = new BufferedReader(fileReader);
         }
     }
 
@@ -126,31 +118,33 @@ public class DefaultCsvParser implements CsvParser {
      * @throws IOException
      */
     public List<CsvLine> readFile(CsvFileConfig fileConfig) throws IOException {
-        checkConnectionForRead(fileConfig);
+        checkFileAndConfig(fileConfig);
         String delim = getDelemiter(fileConfig);
         boolean doubleQuoteMode = defineStatusQuote(fileConfig);
         String detail = "";
+        List<CsvLine> lineList = new ArrayList<>();
 
-        List<CsvLine> csvLineList = new ArrayList<>();
-        while ((detail = bufferedReader.readLine()) != null) {
-            CsvLine line = new CsvLine();
-            List<String> stringList = new ArrayList<>();
-            StringTokenizer stk = new StringTokenizer(detail, delim);
-            while (stk.hasMoreTokens()) {
-                String element = stk.nextToken();
-                if (doubleQuoteMode) {
-                    if (element.length() > 1 && element.startsWith("\"") && element.endsWith("\"")) {
-                        element = element.substring(1, element.length() - 1);
+        try (FileReader fileReader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);){
+            while ((detail = bufferedReader.readLine()) != null) {
+                CsvLine line = new CsvLine();
+                List<String> stringList = new ArrayList<>();
+                StringTokenizer stk = new StringTokenizer(detail, delim);
+                while (stk.hasMoreTokens()) {
+                    String element = stk.nextToken();
+                    if (doubleQuoteMode) {
+                        if (element.length() > 1 && element.startsWith("\"") && element.endsWith("\"")) {
+                            element = element.substring(1, element.length() - 1);
+                        }
                     }
+                    stringList.add(element);
                 }
-                stringList.add(element);
+                line.setStringList(stringList);
+                lineList.add(line);
+                checkNormalFile(lineList);
             }
-            line.setStringList(stringList);
-            csvLineList.add(line);
-            checkNormalFile(csvLineList);
         }
-        return csvLineList;
-
+        return lineList;
     }
 
 
@@ -190,11 +184,6 @@ public class DefaultCsvParser implements CsvParser {
      */
     @Override
     public void close() throws IOException {
-        if (bufferedReader != null) {
-            bufferedReader.close();
-        }
-        if (fileReader != null) {
-            fileReader.close();
-        }
+
     }
 }
