@@ -86,7 +86,11 @@ public class DefaultCsvParser implements CsvParser {
         }
     }
 
-
+    /**
+     * get delimiter from file config
+     * @param fileConfig
+     * @return
+     */
     private String getDelemiter(CsvFileConfig fileConfig) {
         String delim = ",";
         if (fileConfig.getDelimiter() != null
