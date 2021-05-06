@@ -22,8 +22,8 @@ import java.util.StringTokenizer;
 public class DefaultCsvParser implements CsvParser {
 
     private File file;
-    FileReader fileReader = null;
-    BufferedReader bufferedReader = null;
+    private FileReader fileReader = null;
+    private BufferedReader bufferedReader = null;
     private List<CsvLine> csvLineList = null;
     private int curFlag;
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultCsvParser.class);
