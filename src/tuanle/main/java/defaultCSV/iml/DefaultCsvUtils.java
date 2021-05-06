@@ -21,7 +21,7 @@ abstract class DefaultCsvUtils {
             delimiter = csvFileConfig.getDelimiter();
         }
         return delimiter;
-    }
+     }
 
     /**
      * define status of double quote is on or off
@@ -36,10 +36,10 @@ abstract class DefaultCsvUtils {
             quotedMote = true;
         }
         return quotedMote;
-    }
+     }
 
     /**
-     * Check file is normal or not
+     * Check csv file is normal or not
      *
      * @param csvLineList
      * @throws IOException
