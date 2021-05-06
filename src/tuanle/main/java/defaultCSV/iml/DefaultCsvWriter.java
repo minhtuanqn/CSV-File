@@ -14,15 +14,12 @@ import java.util.List;
 /**
  * Implement CSV writing logic here
  */
-public class DefaultCsvWriter implements CsvWriter {
+public class DefaultCsvWriter extends DefaultCsvUtils implements CsvWriter{
 
     private File file;
     private PrintWriter printWriter = null;
     private CsvFileConfig csvFileConfig = null;
 
-    /**
-     * Default constructor
-     */
     public DefaultCsvWriter() {
     }
 
@@ -46,36 +43,6 @@ public class DefaultCsvWriter implements CsvWriter {
         this.csvFileConfig = csvFileConfig;
     }
 
-    /**
-     * get delimiter from file config
-     *
-     * @param fileConfig
-     * @return
-     */
-    private String getDelimiter(CsvFileConfig fileConfig) {
-        String delimiter = ",";
-        //Define delimiter
-        if (csvFileConfig != null && csvFileConfig.getDelimiter() != null
-                && !csvFileConfig.getDelimiter().equals("")) {
-            delimiter = csvFileConfig.getDelimiter();
-        }
-        return delimiter;
-    }
-
-    /**
-     * define status of double quote is on or off
-     *
-     * @param csvFileConfig
-     * @return
-     */
-    private boolean defineStatusOfQuote(CsvFileConfig csvFileConfig) {
-        boolean quotedMote = false;
-        //Check doubleQuoteMode
-        if (csvFileConfig != null && csvFileConfig.isQuoteMote() == true) {
-            quotedMote = true;
-        }
-        return quotedMote;
-    }
 
     /**
      * Check available of file

@@ -19,7 +19,7 @@ import java.util.StringTokenizer;
  * Class DefaultCsvParser implements CsvParser interface
  * Implement CSV parsing logic here
  */
-public class DefaultCsvParser implements CsvParser {
+public class DefaultCsvParser extends DefaultCsvUtils implements CsvParser {
 
     private File file;
     private FileReader fileReader = null;
@@ -79,51 +79,8 @@ public class DefaultCsvParser implements CsvParser {
         }
     }
 
-    /**
-     * Check file is normal or not
-     *
-     * @param csvLineList
-     * @throws IOException
-     */
-    private void checkNormalFile(List<CsvLine> csvLineList) throws IOException {
-        if (csvLineList != null && csvLineList.size() > 0) {
-            int numberOfHeader = csvLineList.get(0).getStringList().size();
-            for (int count = 1; count < csvLineList.size(); count++) {
-                if (numberOfHeader != csvLineList.get(count).getStringList().size()) {
-                    throw new IOException();
-                }
-            }
-        }
-    }
 
-    /**
-     * get delimiter from file config
-     *
-     * @param fileConfig
-     * @return
-     */
-    private String getDelemiter(CsvFileConfig fileConfig) {
-        String delim = ",";
-        if (fileConfig.getDelimiter() != null
-                && !fileConfig.getDelimiter().equals("")) {
-            delim = fileConfig.getDelimiter();
-        }
-        return delim;
-    }
 
-    /**
-     * Check status of double quote mote is on of off
-     *
-     * @param fileConfig
-     * @return
-     */
-    private boolean defineStatusQuote(CsvFileConfig fileConfig) {
-        boolean doubleQuoteMode = false;
-        if (fileConfig.isQuoteMote()) {
-            doubleQuoteMode = true;
-        }
-        return doubleQuoteMode;
-    }
 
     /**
      * Read file for each line in file and then each line is set to one CsvLine Object
@@ -135,8 +92,8 @@ public class DefaultCsvParser implements CsvParser {
      */
     public List<CsvLine> readFile(CsvFileConfig fileConfig) throws IOException {
         checkFileAndConnection(fileConfig);
-        String delim = getDelemiter(fileConfig);
-        boolean doubleQuoteMode = defineStatusQuote(fileConfig);
+        String delim = getDelimiter(fileConfig);
+        boolean doubleQuoteMode = defineStatusOfQuote(fileConfig);
         String detail = "";
         List<CsvLine> lineList = new ArrayList<>();
 
