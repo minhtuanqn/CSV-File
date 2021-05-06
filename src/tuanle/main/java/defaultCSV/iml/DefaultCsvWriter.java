@@ -123,8 +123,6 @@ public class DefaultCsvWriter extends DefaultCsvUtils implements CsvWriter{
                 printWriter.flush();
             }
         }
-
-
     }
 
     /**

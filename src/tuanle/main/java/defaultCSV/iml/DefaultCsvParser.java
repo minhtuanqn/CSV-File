@@ -94,9 +94,9 @@ public class DefaultCsvParser extends DefaultCsvUtils implements CsvParser {
         checkFileAndConnection(fileConfig);
         String delim = getDelimiter(fileConfig);
         boolean doubleQuoteMode = defineStatusOfQuote(fileConfig);
-        String detail = "";
-        List<CsvLine> lineList = new ArrayList<>();
 
+        List<CsvLine> lineList = new ArrayList<>();
+        String detail = "";
         while ((detail = bufferedReader.readLine()) != null) {
             CsvLine line = new CsvLine();
             List<String> stringList = new ArrayList<>();
