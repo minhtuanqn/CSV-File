@@ -121,7 +121,7 @@ public class DefaultCsvParser extends DefaultCsvSupporter implements CsvParser {
     /**
      * Check exist or not of next element
      *
-     * @return
+     * @return status of next element is exist or not
      */
     @Override
     public boolean hasNext() throws NoSuchElementException {

@@ -11,7 +11,7 @@ abstract class DefaultCsvSupporter {
      * get delimiter from file config
      *
      * @param csvFileConfig
-     * @return
+     * @return assigned delimiter in file config
      */
      String getDelimiter(CsvFileConfig csvFileConfig) {
         String delimiter = ",";
@@ -27,7 +27,7 @@ abstract class DefaultCsvSupporter {
      * define status of double quote is on or off
      *
      * @param csvFileConfig
-     * @return
+     * @return status of double quote
      */
      boolean defineStatusOfQuote(CsvFileConfig csvFileConfig) {
         boolean quotedMote = false;
