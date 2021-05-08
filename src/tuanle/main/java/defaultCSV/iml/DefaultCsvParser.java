@@ -19,7 +19,7 @@ import java.util.StringTokenizer;
  * Class DefaultCsvParser implements CsvParser interface
  * Implement CSV parsing logic here
  */
-public class DefaultCsvParser extends DefaultCsvUtils implements CsvParser {
+public class DefaultCsvParser extends DefaultCsvSupporter implements CsvParser {
 
     private File file;
     private FileReader fileReader = null;
@@ -50,7 +50,7 @@ public class DefaultCsvParser extends DefaultCsvUtils implements CsvParser {
             this.csvLineList = readFile(fileConfig);
         } catch (IOException e) {
             String message = "ERROR IOException from read file function: ";
-            LOGGER.error(message, e.getStackTrace());
+            LOGGER.error(message, e.fillInStackTrace());
         }
         this.curFlag = 0;
     }

@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Implement CSV writing logic here
  */
-public class DefaultCsvWriter extends DefaultCsvUtils implements CsvWriter{
+public class DefaultCsvWriter extends DefaultCsvSupporter implements CsvWriter{
 
     private File file;
     private PrintWriter printWriter = null;
@@ -23,21 +23,11 @@ public class DefaultCsvWriter extends DefaultCsvUtils implements CsvWriter{
     public DefaultCsvWriter() {
     }
 
-    /**
-     * Constructor with 1 parameter
-     *
-     * @param file
-     */
     public DefaultCsvWriter(File file) {
         this.file = file;
     }
 
-    /**
-     * Constructor with 2 parameters
-     *
-     * @param file
-     * @param csvFileConfig
-     */
+
     public DefaultCsvWriter(File file, CsvFileConfig csvFileConfig) {
         this.file = file;
         this.csvFileConfig = csvFileConfig;

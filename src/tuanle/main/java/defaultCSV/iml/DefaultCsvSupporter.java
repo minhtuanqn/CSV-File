@@ -6,7 +6,7 @@ import model.CsvLine;
 import java.io.IOException;
 import java.util.List;
 
-abstract class DefaultCsvUtils {
+abstract class DefaultCsvSupporter {
     /**
      * get delimiter from file config
      *
