@@ -67,6 +67,7 @@ public class DefaultCsvParserTest {
         // Get test data from resources
         final File file = Paths.get(DefaultCsvParserTest.class.getResource(fileName).toURI()).toFile();
         final CsvParser parser = new DefaultCsvParser(file, config);
+        parser.readFile(config);
 
         // Assert lines
         CsvLinesAssertion

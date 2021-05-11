@@ -33,9 +33,11 @@ public class DefaultCsvParser extends DefaultCsvSupporter implements CsvParser {
      * @param file
      * @throws IOException
      */
-    public DefaultCsvParser(File file) throws IOException {
+    public DefaultCsvParser(File file) {
+        if (file == null) {
+            throw new IllegalArgumentException();
+        }
         this.file = file;
-        this.csvLineList = readFile(null);
         this.curFlag = 0;
     }
 
@@ -45,13 +47,13 @@ public class DefaultCsvParser extends DefaultCsvSupporter implements CsvParser {
      * @throws IOException
      */
     public DefaultCsvParser(File file, CsvFileConfig fileConfig) {
-        this.file = file;
-        try {
-            this.csvLineList = readFile(fileConfig);
-        } catch (IOException e) {
-            String message = "ERROR IOException from read file function: ";
-            LOGGER.error(message, e.fillInStackTrace());
+        if (fileConfig == null) {
+            throw new IllegalArgumentException();
         }
+        if (file == null) {
+            throw new IllegalArgumentException();
+        }
+        this.file = file;
         this.curFlag = 0;
     }
 
@@ -62,12 +64,6 @@ public class DefaultCsvParser extends DefaultCsvSupporter implements CsvParser {
      * @throws IOException
      */
     private void checkFileAndConnection(CsvFileConfig fileConfig) throws IOException {
-        if (fileConfig == null) {
-            throw new IllegalArgumentException();
-        }
-        if (file == null) {
-            throw new IllegalArgumentException();
-        }
         if (!file.exists()) {
             throw new IOException();
         }
@@ -113,6 +109,7 @@ public class DefaultCsvParser extends DefaultCsvSupporter implements CsvParser {
             line.setStringList(stringList);
             lineList.add(line);
             checkNormalFile(lineList);
+            this.csvLineList = lineList;
         }
         return lineList;
     }
