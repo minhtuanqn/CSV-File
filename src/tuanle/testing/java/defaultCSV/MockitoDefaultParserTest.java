@@ -31,13 +31,14 @@ public class MockitoDefaultParserTest {
     }
 
     @Test
-    public void whenReadFile_WithQuote_ThenLineList() {
+    public void whenReadFile_WithQuote_ThenLineList() throws IOException {
         File file = createFile("/quoted.csv");
 
         Mockito.when(fileConfig.getDelimiter()).thenReturn("|");
         Mockito.when(fileConfig.isQuoteMote()).thenReturn(true);
 
         DefaultCsvParser defaultCsvParserTest = new DefaultCsvParser(file, fileConfig);
+        defaultCsvParserTest.readFile(fileConfig);
 
         CsvLinesAssertion
                 .create().expectLine(0)
@@ -62,6 +63,7 @@ public class MockitoDefaultParserTest {
         Mockito.when(fileConfig.getDelimiter()).thenReturn("|");
         Mockito.when(fileConfig.isQuoteMote()).thenReturn(false);
         DefaultCsvParser defaultCsvParserTest = new DefaultCsvParser(file, fileConfig);
+        defaultCsvParserTest.readFile(fileConfig);
 
         CsvLinesAssertion
                 .create().expectLine(0)
