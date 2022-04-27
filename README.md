@@ -1,5 +1,4 @@
 # This is CSV-File Repository
-![Practice Java Core | © 2022 by minh.tuan]()
 
 ## You will find in this repo:
 
